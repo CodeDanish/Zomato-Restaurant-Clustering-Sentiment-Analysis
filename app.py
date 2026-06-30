@@ -238,13 +238,14 @@ elif dropdown_popularity == "Emerging Outlets (<200 Followers)":
 st.markdown(f"Showing **{len(filtered_df)}** matching merchants based on current drop-down conditions:")
 
 if not filtered_df.empty:
+    display_df = filtered_df.copy()
+    display_df['cost per person'] = display_df['cost per person'].apply(lambda x: f"₹{x:.0f}")
+    display_df['avg rating'] = display_df['avg rating'].apply(lambda x: f"{x:.2f} ★")
+    display_df['total followers'] = display_df['total followers'].apply(lambda x: f"{x:,}")
+    display_df['avg sentiments'] = display_df['avg sentiments'].apply(lambda x: f"{x:+.2f}")
+    
     st.dataframe(
-        filtered_df.style.format({
-            'cost per person': '₹{:.0f}',
-            'avg rating': '{:.2f} ★',
-            'total followers': '{:,}',
-            'avg sentiments': '{:+.2f}'
-        }).background_gradient(subset=['avg sentiments'], cmap='RdYlGn', vmin=-1.0, vmax=1.0),
+        display_df,
         use_container_width=True,
         hide_index=True
     )
